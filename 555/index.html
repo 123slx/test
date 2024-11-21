@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>孙lanxing的项目</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="Cache-Control" content="max-age=31536000">
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+
+		body {
+			background: linear-gradient(45deg, #000000, #1a1a1a);
+			font-family: 'Helvetica Neue', Arial, sans-serif;
+			margin: 0;
+			overflow: hidden;
+		}
+
+		a {
+			color: #ffffff;
+		}
+
+		#info {
+			position: absolute;
+			width: 100%;
+			color: #ffffff;
+			padding: 5px;
+			font-family: Monospace;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+			z-index: 1;
+		}
+
+		#menu {
+			position: fixed;
+			bottom: 30px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+		}
+
+		#menu button {
+			background: rgba(0, 127, 127, 0.2);
+			border: 2px solid rgba(0, 255, 255, 0.4);
+			border-radius: 25px;
+			color: #fff;
+			padding: 10px 25px;
+			margin: 0 10px;
+			font-size: 16px;
+			transition: all 0.3s ease;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			backdrop-filter: blur(5px);
+		}
+
+		#menu button:hover {
+			background: rgba(0, 255, 255, 0.2);
+			border-color: rgba(0, 255, 255, 0.8);
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+		}
+
+		.element {
+			width: 120px;
+			height: 120px;
+			box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+			border: 2px solid rgba(0, 255, 255, 0.2);
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			overflow: hidden;
+			background: rgba(0, 127, 127, 0.1);
+			backdrop-filter: blur(5px);
+			text-align: center;
+			cursor: default;
+		}
+
+		.element:hover {
+			transform: scale(1.05);
+			box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+			border-color: rgba(0, 255, 255, 0.6);
+		}
+
+		.element img {
+			width: 120px;
+			height: 120px;
+			object-fit: cover;
+			transition: all 0.3s ease;
+		}
+
+		.element .number {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font-size: 12px;
+			color: rgba(127, 255, 255, 0.75);
+		}
+
+		.element .symbol {
+			position: absolute;
+			top: 40px;
+			left: 0px;
+			right: 0px;
+			font-size: 60px;
+			font-weight: bold;
+			color: rgba(255, 255, 255, 0.75);
+			text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+		}
+
+		.element .details {
+			position: absolute;
+			bottom: 15px;
+			left: 0px;
+			right: 0px;
+			font-size: 12px;
+			color: rgba(127, 255, 255, 0.75);
+		}
+
+		button {
+			color: rgba(127, 255, 255, 0.75);
+			background: transparent;
+			outline: 1px solid rgba(127, 255, 255, 0.75);
+			border: 0px;
+			padding: 5px 10px;
+			cursor: pointer;
+		}
+
+		button:hover {
+			background-color: rgba(0, 255, 255, 0.5);
+		}
+
+		button:active {
+			color: #000000;
+			background-color: rgba(0, 255, 255, 0.75);
+		}
+
+		.show_info {
+			position: fixed;
+			background: rgba(0, 0, 0, 0.8);
+			padding: 20px;
+			width: 320px;
+			margin: 0 auto;
+			left: 0;
+			right: 0;
+			border-radius: 15px;
+			box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+			backdrop-filter: blur(10px);
+			border: 2px solid rgba(0, 255, 255, 0.2);
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 1000;
+		}
+
+		.show_info img {
+			display: block;
+			margin: auto;
+			border-radius: 10px;
+			box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+			transition: all 0.3s ease;
+		}
+
+		.show_info img:hover {
+			transform: scale(1.02);
+		}
+
+		.show_info .intro {
+			color: #fff;
+			text-align: center;
+			margin-top: 15px;
+			font-size: 16px;
+			line-height: 1.6;
+			padding: 10px;
+			background: rgba(0, 127, 127, 0.1);
+			border-radius: 8px;
+		}
+
+		.show_info .intro:after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			width: 100%;
+			height: 22px;
+			background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.6));
+		}
+
+		.show_info .info_my {
+			text-align: center;
+		}
+
+		.show_info .info_my > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.show_info .info_my .info_mem {
+			color: #fff;
+			max-width: 120px;
+		}
+
+		.show_info .info_my .info_mem > div {
+			text-align: left;
+		}
+
+		.show_info .info_my .info_mem > div.nickname {
+			max-width: 120px;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		/* 添加页面加载动画 */
+		.loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #000;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+			transition: opacity 0.5s ease;
+		}
+
+		.loader.fade-out {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.loader-content {
+			width: 50px;
+			height: 50px;
+			border: 3px solid rgba(0, 255, 255, 0.3);
+			border-radius: 50%;
+			border-top-color: rgba(0, 255, 255, 0.8);
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+	<link rel="stylesheet" href="css/animate.min.css" media="print" onload="this.media='all'">
+	<link rel="preload" href="js/three.min.js" as="script">
+	<link rel="preload" href="js/tween.min.js" as="script">
+	<link rel="preload" href="img/a1.png" as="image">
+</head>
+
+<body>
+	<div class="loader">
+		<div class="loader-content"></div>
+	</div>
+
+	<audio id="bgMusic" preload="none">
+		<source src="audio/background.mp3" type="audio/mpeg">
+	</audio>
+
+	<div id="container"></div>
+	<div id="menu">
+		<button id="table">表格</button>
+		<button id="sphere">球球</button>
+		<button id="helix">螺旋</button>
+		<button id="grid">格子</button>
+	</div>
+
+	<div class="show_info animated" style="display:none;">
+		<div class="info_my">
+			<img loading="lazy" width=200px src="img/b2.png" />
+		</div>
+		<div class="intro">图片展示项目！</div>
+	</div>
+
+	<script>
+		// 异步加载非关键脚本
+		function loadScript(src) {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.src = src;
+				script.async = true;
+				
+				const timeout = setTimeout(() => {
+					reject(new Error(`加载超时: ${src}`));
+				}, 10000); // 10秒超时
+
+				script.onload = () => {
+					clearTimeout(timeout);
+					resolve();
+				};
+				
+				script.onerror = () => {
+					clearTimeout(timeout);
+					reject(new Error(`加载失败: ${src}`));
+				};
+				
+				document.body.appendChild(script);
+			});
+		}
+
+		// 优化图片加载
+		function preloadImages(images) {
+			return Promise.all(images.map(src => {
+				return new Promise((resolve, reject) => {
+					const img = new Image();
+					img.src = src;
+					img.onload = resolve;
+					img.onerror = reject;
+				});
+			}));
+		}
+
+		// 主要初始化函数
+		async function initialize() {
+			try {
+				// 先移除加载动画，避免阻塞
+				const loader = document.querySelector('.loader');
+				
+				// 按顺序加载所有必要的脚本
+				await Promise.all([
+					loadScript('js/three.min.js'),
+					loadScript('js/tween.min.js'),
+					loadScript('js/jquery.min.js')
+				]);
+				
+				await Promise.all([
+					loadScript('js/TrackballControls.js'),
+					loadScript('js/CSS3DRenderer.js')
+				]);
+
+				// 预加载图片
+				await preloadImages(['img/a1.png', 'img/b2.png']);
+
+				// 初始化场景
+				init();
+				animate();
+
+				// 移除加载动画
+				setTimeout(() => {
+					loader.classList.add('fade-out');
+					setTimeout(() => {
+						loader.style.display = 'none';
+					}, 500);
+				}, 500);
+
+				// 延迟加载音频
+				setTimeout(() => {
+					const bgMusic = document.getElementById('bgMusic');
+					if(bgMusic) {
+						bgMusic.play().catch(e => {
+							console.log('Auto-play prevented:', e);
+						});
+					}
+				}, 2000);
+
+			} catch (error) {
+				console.error('初始化失败:', error);
+				// 显示错误信息给用户
+				const loader = document.querySelector('.loader');
+				if(loader) {
+					loader.innerHTML = '<div style="color: white;">加载失败，请刷新页面重试</div>';
+				}
+			}
+		}
+
+		// 配置参数
+		const config = {
+			imageCount: 199,
+			updateInterval: 4500,
+			rotateSpeed: 0.008
+		};
+
+		// 启动初始化
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initialize);
+		} else {
+			initialize();
+		}
+
+		// 使用 requestIdleCallback 处理非关键任务
+		window.requestIdleCallback = window.requestIdleCallback || function(cb) {
+			return setTimeout(() => {
+				cb({
+					didTimeout: false,
+					timeRemaining: () => 1
+				});
+			}, 1);
+		};
+
+		// 全局变量声明
+		var personArray = new Array;
+		var CurPersonNum = 0;
+		var camera, scene, renderer;
+		var controls;
+		var objects = [];
+		var targets = { table: [], sphere: [], helix: [], grid: [] };
+		
+		// animate数组
+		var _in = ['bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'slideInDown', 'slideInLeft', 'slideInRight'];
+		var _out = ['bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideOutDown', 'slideOutLeft', 'slideOutRight'];
+
+		// 数据初始化
+		for (var i = 0; i < config.imageCount; i++) {
+			personArray.push({
+				image: "img/a1.png"
+			});
+		}
+
+		var table = new Array;
+		for (var i = 0; i < personArray.length; i++) {
+			table[i] = new Object();
+			if (i < personArray.length) {
+				table[i] = personArray[i];
+				table[i].src = personArray[i].thumb_image;
+			}
+			table[i].p_x = i % 20 + 1;
+			table[i].p_y = Math.floor(i / 20) + 1;
+		}
+
+		// 模拟推送数据
+		var s = setInterval(function () {
+			// get animate
+			var rand_in = parseInt(Math.random() * _in.length, 10);
+			var rand_out = parseInt(Math.random() * _out.length, 10);
+			if (CurPersonNum >= personArray.length) {
+				CurPersonNum = 0;
+			}
+			$('.show_info').show();
+			$('.show_info').addClass(_in[rand_in]);
+			setTimeout(function () {
+				$('.show_info').removeClass(_in[rand_in]);
+				// 更改展示的图片
+				var img = document.getElementsByClassName('element')[CurPersonNum].getElementsByTagName('img')[0];
+				img.src = 'img/a1.png';
+				CurPersonNum++;
+				setTimeout(function () {
+					$('.show_info').addClass(_out[rand_out]);
+					setTimeout(function () {
+						$('.show_info').removeClass(_out[rand_out]);
+						$('.show_info').hide();
+					}, 1000);
+				}, 1500);
+			}, 1000);
+		}, 4500);
+
+		function init() {
+			camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+			camera.position.z = 3000;
+			scene = new THREE.Scene();
+			
+			// 创建元素
+			for (var i = 0; i < table.length; i++) {
+
+				var element = document.createElement('div');
+				element.className = 'element';
+				element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
+
+				var img = document.createElement('img');
+				img.src = "img/a1.png";
+				element.appendChild(img);
+
+				var object = new THREE.CSS3DObject(element);
+				object.position.x = Math.random() * 4000 - 2000;
+				object.position.y = Math.random() * 4000 - 2000;
+				object.position.z = Math.random() * 4000 - 2000;
+				scene.add(object);
+				objects.push(object);
+
+				var object = new THREE.Object3D();
+				object.position.x = (table[i].p_x * 140) - 1330;
+				object.position.y = -(table[i].p_y * 180) + 990;
+				targets.table.push(object);
+
+			}
+
+			// sphere
+
+			var vector = new THREE.Vector3();
+			var spherical = new THREE.Spherical();
+
+			for (var i = 0, l = objects.length; i < l; i++) {
+
+				var phi = Math.acos(-1 + (2 * i) / l);
+				var theta = Math.sqrt(l * Math.PI) * phi;
+
+				var object = new THREE.Object3D();
+
+				spherical.set(800, phi, theta);
+
+				object.position.setFromSpherical(spherical);
+
+				vector.copy(object.position).multiplyScalar(2);
+
+				object.lookAt(vector);
+
+				targets.sphere.push(object);
+
+			}
+
+			// helix
+
+			var vector = new THREE.Vector3();
+			var cylindrical = new THREE.Cylindrical();
+
+			for (var i = 0, l = objects.length; i < l; i++) {
+
+				var theta = i * 0.175 + Math.PI;
+				var y = - (i * 5) + 450;
+
+				var object = new THREE.Object3D();
+
+				// 参数一 圈的大小 参数二 左右间距 参数三 上下间距
+				cylindrical.set(900, theta, y);
+
+				object.position.setFromCylindrical(cylindrical);
+
+				vector.x = object.position.x * 2;
+				vector.y = object.position.y;
+				vector.z = object.position.z * 2;
+
+				object.lookAt(vector);
+
+				targets.helix.push(object);
+
+			}
+
+			// grid
+
+			for (var i = 0; i < objects.length; i++) {
+
+				var object = new THREE.Object3D();
+
+				object.position.x = ((i % 5) * 400) - 800; // 400 图片的左右间距  800 x轴中心店
+				object.position.y = (- (Math.floor(i / 5) % 5) * 300) + 500;  // 500 y轴中心店
+				object.position.z = (Math.floor(i / 25)) * 200 - 800;// 300调整 间距 800z轴中心店
+
+				targets.grid.push(object);
+
+			}
+
+			//渲染
+			renderer = new THREE.CSS3DRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.domElement.style.position = 'absolute';
+			document.getElementById('container').appendChild(renderer.domElement);
+
+			// 鼠标控制
+			controls = new THREE.TrackballControls(camera, renderer.domElement);
+			controls.rotateSpeed = 0.5;
+			controls.minDistance = 500;
+			controls.maxDistance = 6000;
+			controls.addEventListener('change', render);
+
+			// 自动更换
+			var ini = 0;
+			setInterval(function () {
+				ini = ini >= 3 ? 0 : ini;
+				++ini;
+				switch (ini) {
+					case 1:
+						transform(targets.sphere, 1000);
+						break;
+					case 2:
+						transform(targets.helix, 1000);
+						break;
+					case 3:
+						transform(targets.grid, 1000);
+						break;
+				}
+			}, 8000);
+
+			var button = document.getElementById('table');
+			button.addEventListener('click', function (event) {
+				transform(targets.table, 1000);
+			}, false);
+
+			var button = document.getElementById('sphere');
+			button.addEventListener('click', function (event) {
+				transform(targets.sphere, 2000);
+			}, false);
+
+			var button = document.getElementById('helix');
+			button.addEventListener('click', function (event) {
+				transform(targets.helix, 2000);
+			}, false);
+
+			var button = document.getElementById('grid');
+			button.addEventListener('click', function (event) {
+				transform(targets.grid, 2000);
+			}, false);
+
+			transform(targets.table, 2000);
+
+			//
+
+			window.addEventListener('resize', onWindowResize, false);
+
+			initButtons();
+			initAutoTransform();
+
+		}
+
+		function transform(targets, duration) {
+			TWEEN.removeAll();
+
+			for (var i = 0; i < objects.length; i++) {
+				var object = objects[i];
+				var target = targets[i];
+
+				if (!object || !target) continue;
+
+				new TWEEN.Tween(object.position)
+					.to({ 
+						x: target.position.x, 
+						y: target.position.y, 
+						z: target.position.z 
+					}, Math.random() * duration + duration)
+					.easing(TWEEN.Easing.Exponential.InOut)
+					.start();
+
+				new TWEEN.Tween(object.rotation)
+					.to({ 
+						x: target.rotation.x, 
+						y: target.rotation.y, 
+						z: target.rotation.z 
+					}, Math.random() * duration + duration)
+					.easing(TWEEN.Easing.Exponential.InOut)
+					.start();
+			}
+
+			new TWEEN.Tween(this)
+				.to({}, duration * 2)
+				.onUpdate(render)
+				.start();
+		}
+
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			render();
+		}
+
+		function animate() {
+			requestAnimationFrame(animate);
+			TWEEN.update();
+			controls.update();
+			render();
+		}
+
+		function render() {
+			renderer.render(scene, camera);
+		}
+
+		function preloadNextImage(src) {
+			const img = new Image();
+			img.src = src;
+		}
+
+		window.addEventListener('error', function(e) {
+			console.error('页面错误: ', e.message);
+		});
+
+		// 错误处理
+		window.addEventListener('error', function(e) {
+			console.error('页面错误: ', e.message);
+		});
+
+		// 图片预加载
+		function preloadImages() {
+			personArray.forEach(function(item) {
+				var img = new Image();
+				img.src = item.image;
+			});
+		}
+
+		// 页面加载完成后预加载图片
+		window.addEventListener('load', preloadImages);
+
+		function initButtons() {
+			document.getElementById('table').addEventListener('click', function() {
+				transform(targets.table, 2000);
+			}, false);
+
+			document.getElementById('sphere').addEventListener('click', function() {
+				transform(targets.sphere, 2000);
+			}, false);
+
+			document.getElementById('helix').addEventListener('click', function() {
+				transform(targets.helix, 2000);
+			}, false);
+
+			document.getElementById('grid').addEventListener('click', function() {
+				transform(targets.grid, 2000);
+			}, false);
+		}
+
+		function initAutoTransform() {
+			var layouts = ['sphere', 'helix', 'grid'];
+			var currentIndex = 0;
+			
+			setInterval(function() {
+				currentIndex = (currentIndex + 1) % layouts.length;
+				transform(targets[layouts[currentIndex]], 2000);
+			}, 8000);
+		}
+
+	</script>
+
+</body>
+
+</html>
